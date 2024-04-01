@@ -1,0 +1,42 @@
+version: "3.1"
+services:
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: always
+    networks:
+      - backend
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: pedbot
+  app:
+    build: .
+    container_name: app
+    networks:
+      - backend
+      - frontend
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/usr/app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+volumes:
+  mysql_data:
+networks:
+  frontend:
+    name: frontend
+    driver: bridge
+  backend:
+    name: backend
+    driver: bridge
