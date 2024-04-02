@@ -1,7 +1,7 @@
-const { Category } = require("../db/models");
+const { category } = require("../db/models");
 
 module.exports.index = async (req, res) => {
-  const categories = await Category.findAll();
+  const categories = await category.findAll();
   res.json({
     categories,
   });

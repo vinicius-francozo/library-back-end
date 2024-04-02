@@ -1,13 +1,13 @@
-const { Favorite, Book, Author } = require("../db/models");
+const { favorite, book, author } = require("../db/models");
 
 module.exports.index = async (req, res) => {
-  const favorites = await Favorite.findAll({
+  const favorites = await favorite.findAll({
     where: { userId: req.user.id },
     attributes: ["id", "userId", "bookId"],
     include: {
-      model: Book,
+      model: book,
       attributes: ["id", "title", "cover"],
-      include: { model: Author, attributes: ["name"] },
+      include: { model: author, attributes: ["name"] },
     },
   });
   res.json({
@@ -16,20 +16,20 @@ module.exports.index = async (req, res) => {
 };
 
 module.exports.show = async (req, res) => {
-  const favorite = await Favorite.findOne({
+  const favorites = await favorite.findOne({
     where: { userId: req.user.id, bookId: req.params.bookId },
   });
 
-  res.json({ favorite });
+  res.json({ favorites });
 };
 
 module.exports.create = async (req, res) => {
-  const book = await Book.findByPk(req.params.bookId);
-  const favorite = await Favorite.findOne({
+  const books = await book.findByPk(req.params.bookId);
+  const favorites = await favorite.findOne({
     where: { userId: req.user.id, bookId: req.params.bookId },
   });
-  if (book && !favorite) {
-    await Favorite.create({
+  if (books && !favorites) {
+    await favorite.create({
       userId: req.user.id,
       bookId: req.params.bookId,
     });
@@ -46,7 +46,7 @@ module.exports.create = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
   const { bookId } = req.params;
-  const isDeleted = await Favorite.destroy({
+  const isDeleted = await favorite.destroy({
     where: { userId: req.user.id, bookId: bookId },
   });
   if (!isDeleted) {

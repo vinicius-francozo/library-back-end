@@ -9,22 +9,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.Book, {
+      this.hasMany(models.book, {
         foreignKey: "userId",
       });
-      this.hasMany(models.Author, {
+      this.hasMany(models.author, {
         foreignKey: "userId",
       });
-      this.hasMany(models.Review, {
+      this.hasMany(models.review, {
         foreignKey: "userId",
       });
-      this.belongsToMany(models.Book, {
-        through: models.Favorite,
+      this.belongsToMany(models.book, {
+        through: models.favorite,
         foreignKey: "userId",
         otherKey: "bookId",
       });
-      this.belongsToMany(models.Book, {
-        through: models.Rent,
+      this.belongsToMany(models.book, {
+        through: models.rent,
         foreignKey: "userId",
         otherKey: "bookId",
       });
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "user",
     }
   );
   return User;

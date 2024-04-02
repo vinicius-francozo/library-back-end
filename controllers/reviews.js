@@ -1,7 +1,7 @@
-const { Review, Book } = require("../db/models");
+const { review, book } = require("../db/models");
 
 module.exports.getUserReviews = async (req, res) => {
-  const reviews = await Review.findAll({
+  const reviews = await review.findAll({
     where: { userId: req.user.id },
   });
   res.json({
@@ -10,8 +10,8 @@ module.exports.getUserReviews = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const book = await Book.findByPk(req.params.bookId);
-  const review = await book.createReview({ userId: req.user.id, ...req.body });
+  const books = await book.findByPk(req.params.bookId);
+  const review = await books.createReview({ userId: req.user.id, ...req.body });
 
   res.json({
     review,
@@ -20,10 +20,10 @@ module.exports.create = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
   const { id } = req.params;
-  const isDeleted = await Review.destroy({ where: { id: id } });
+  const isDeleted = await review.destroy({ where: { id: id } });
   if (!isDeleted) {
-    res.json({ message: "Review não encontrado" }).end();
+    res.json({ message: "review não encontrado" }).end();
     return;
   }
-  res.json({ message: "Review deletado com sucesso" });
+  res.json({ message: "review deletado com sucesso" });
 };

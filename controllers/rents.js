@@ -1,14 +1,14 @@
-const { Rent, Book, Author } = require("../db/models");
+const { rent, book, author } = require("../db/models");
 const { Op } = require("sequelize");
 
 module.exports.listCheckout = async (req, res) => {
-  const rents = await Rent.findAll({
+  const rents = await rent.findAll({
     where: { userId: req.user.id, status: 0 },
     attributes: ["id"],
     include: {
-      model: Book,
+      model: book,
       attributes: ["id", "title", "cover", "sinopsis"],
-      include: { model: Author, attributes: ["name"] },
+      include: { model: author, attributes: ["name"] },
     },
   });
   res.json({
@@ -17,13 +17,13 @@ module.exports.listCheckout = async (req, res) => {
 };
 
 module.exports.getOneCheckoutOrRented = async (req, res) => {
-  const rents = await Rent.findOne({
+  const rents = await rent.findOne({
     where: { userId: req.user.id, bookId: req.params.bookId, status: [0, 1] },
     attributes: ["id"],
     include: {
-      model: Book,
+      model: book,
       attributes: ["id", "title", "cover", "sinopsis"],
-      include: { model: Author, attributes: ["name"] },
+      include: { model: author, attributes: ["name"] },
     },
   });
   res.json({
@@ -32,7 +32,7 @@ module.exports.getOneCheckoutOrRented = async (req, res) => {
 };
 
 module.exports.confirmPurchase = async (req, res) => {
-  await Rent.update(
+  await rent.update(
     { status: 1 },
     { where: { userId: req.user.id, status: 0 } }
   );
@@ -40,25 +40,25 @@ module.exports.confirmPurchase = async (req, res) => {
 };
 
 module.exports.listRents = async (req, res) => {
-  const rents = await Rent.findAll({
+  const rents = await rent.findAll({
     where: { userId: req.user.id, status: 1 },
     attributes: ["id"],
     include: {
-      model: Book,
+      model: book,
       attributes: ["id", "title", "cover", "sinopsis"],
-      include: { model: Author, attributes: ["name"] },
+      include: { model: author, attributes: ["name"] },
     },
   });
   res.json({ rents });
 };
 
 module.exports.returnBook = async (req, res) => {
-  const rent = await Rent.findOne({
+  const rents = await rent.findOne({
     where: { userId: req.user.id, id: req.params.id, status: 1 },
   });
-  if (rent) {
-    await rent.set({ status: 2 });
-    await rent.save();
+  if (rents) {
+    await rents.set({ status: 2 });
+    await rents.save();
 
     res.json({ message: "Livro devolvido com sucesso" }).end();
     return;
@@ -67,16 +67,16 @@ module.exports.returnBook = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const book = await Book.findByPk(req.params.bookId);
-  const rent = await Rent.findOne({
+  const books = await book.findByPk(req.params.bookId);
+  const rents = await rent.findOne({
     where: {
       userId: req.user.id,
       bookId: req.params.bookId,
       status: [0, 1],
     },
   });
-  if (book && !rent) {
-    await Rent.create({
+  if (books && !rents) {
+    await rent.create({
       userId: req.user.id,
       bookId: req.params.bookId,
     });
@@ -93,7 +93,7 @@ module.exports.create = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
   const { id } = req.params;
-  const isDeleted = await Rent.destroy({
+  const isDeleted = await rent.destroy({
     where: { userId: req.user.id, id: id, status: 0 },
   });
   if (!isDeleted) {

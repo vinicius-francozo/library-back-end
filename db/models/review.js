@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Book, {
+      this.belongsTo(models.book, {
         foreignKey: "bookId",
         onDelete: "CASCADE",
       });
-      this.belongsTo(models.User, {
+      this.belongsTo(models.user, {
         foreignKey: "userId",
         onDelete: "CASCADE",
       });
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Review",
+      modelName: "review",
     }
   );
   return Review;

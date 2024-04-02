@@ -9,28 +9,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.User, {
+      this.belongsTo(models.user, {
         foreignKey: "userId",
         onDelete: "CASCADE",
       });
-      this.belongsTo(models.Category, {
+      this.belongsTo(models.category, {
         foreignKey: "categoryId",
         onDelete: "CASCADE",
       });
-      this.belongsTo(models.Author, {
+      this.belongsTo(models.author, {
         foreignKey: "authorId",
         onDelete: "CASCADE",
       });
-      this.hasMany(models.Review, {
+      this.hasMany(models.review, {
         foreignKey: "bookId",
       });
-      this.belongsToMany(models.User, {
-        through: models.Favorite,
+      this.belongsToMany(models.user, {
+        through: models.favorite,
         foreignKey: "bookId",
         otherKey: "userId",
       });
-      this.belongsToMany(models.User, {
-        through: models.Rent,
+      this.belongsToMany(models.user, {
+        through: models.rent,
         foreignKey: "bookId",
         otherKey: "userId",
       });
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Book",
+      modelName: "book",
     }
   );
   return Book;

@@ -1,12 +1,12 @@
-const { Book, Review, User, Category, Author } = require("../db/models");
+const { book, review, user, category, author } = require("../db/models");
 const objectFilter = require("../utils/objectFilter");
 const { Op } = require("sequelize");
 
 module.exports.index = async (req, res) => {
-  const books = await Book.findAll({
+  const books = await book.findAll({
     include: [
-      { model: Category, attributes: ["id", "name"] },
-      { model: Author, attributes: ["id", "name", "surname"] },
+      { model: category, attributes: ["id", "name"] },
+      { model: author, attributes: ["id", "name", "surname"] },
     ],
   });
   res.json({
@@ -17,12 +17,12 @@ module.exports.index = async (req, res) => {
 module.exports.paginatedIndex = async (req, res) => {
   const perPage = parseInt(req.query.perPage);
   const offset = parseInt(req.query.page * perPage);
-  const books = await Book.findAll({
+  const books = await book.findAll({
     offset: offset,
     limit: perPage,
     include: [
-      { model: Author, attributes: ["id", "name", "surname"] },
-      { model: Category, attributes: ["name"] },
+      { model: author, attributes: ["id", "name", "surname"] },
+      { model: category, attributes: ["name"] },
     ],
   });
 
@@ -32,38 +32,38 @@ module.exports.paginatedIndex = async (req, res) => {
 };
 
 module.exports.show = async (req, res) => {
-  const book = await Book.findOne({
+  const books = await book.findOne({
     where: { id: req.params.id },
     include: [
       {
-        model: Category,
+        model: category,
         attributes: ["id", "name"],
       },
       {
-        model: Author,
+        model: author,
         attributes: ["id", "name", "surname"],
       },
       {
-        model: Review,
+        model: review,
         attributes: ["text", "rate", "id", "userId"],
-        include: { model: User, attributes: ["id", "username"] },
+        include: { model: user, attributes: ["id", "username"] },
       },
     ],
   });
   res.json({
-    book,
+    books,
   });
 };
 
 module.exports.listByName = async (req, res) => {
-  const books = await Book.findAll({
+  const books = await book.findAll({
     where: {
       title: { [Op.like]: `%${req.params.name}%` },
     },
 
     include: [
-      { model: Author, attributes: ["id", "name", "surname"] },
-      { model: Category, attributes: ["name"] },
+      { model: author, attributes: ["id", "name", "surname"] },
+      { model: category, attributes: ["name"] },
     ],
   });
 
@@ -74,13 +74,13 @@ module.exports.listByName = async (req, res) => {
 
 module.exports.create = async (req, res) => {
   const image = req.file.path;
-  const book = await Book.create({
+  const books = await book.create({
     ...req.body,
     userId: req.user.id,
     cover: image,
   });
   res.json({
-    book,
+    books,
   });
 };
 
@@ -90,16 +90,15 @@ module.exports.update = async (req, res) => {
     req.body,
     (param) => !["userId", "id"].includes(param)
   );
-  console.log(req, updateParams);
-  const book = await Book.findByPk(req.params.id);
-  await book.set({ ...updateParams, cover: image });
-  await book.save();
-  res.json({ book });
+  const books = await book.findByPk(req.params.id);
+  await books.set({ ...updateParams, cover: image });
+  await books.save();
+  res.json({ books });
 };
 
 module.exports.delete = async (req, res) => {
   const { id } = req.params;
-  const isDeleted = await Book.destroy({ where: { id: id } });
+  const isDeleted = await book.destroy({ where: { id: id } });
   if (!isDeleted) {
     res.json({ message: "Livro não encontrado" }).end();
     return;
