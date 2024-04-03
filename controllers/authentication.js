@@ -11,7 +11,12 @@ module.exports.login = async (req, res) => {
 
   if (isCorrectPassword) {
     jwt.sign(
-      { id: users.id, username: users.username, email: users.email },
+      {
+        id: users.id,
+        username: users.username,
+        email: users.email,
+        isAdmin: users.isAdmin,
+      },
       jwtKey,
       (err, token) => {
         if (err) {
@@ -20,7 +25,11 @@ module.exports.login = async (req, res) => {
         }
         res
           .set("x-access-token", token)
-          .json({ id: users.id, username: users.username })
+          .json({
+            id: users.id,
+            username: users.username,
+            isAdmin: users.isAdmin,
+          })
           .end();
         return;
       }

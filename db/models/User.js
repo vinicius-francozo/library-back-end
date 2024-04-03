@@ -45,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       city: DataTypes.STRING,
       country: DataTypes.STRING,
       image: DataTypes.STRING,
+      isAdmin: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {
       sequelize,

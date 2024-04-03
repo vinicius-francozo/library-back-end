@@ -4,13 +4,13 @@ const objectFilter = require("../utils/objectFilter");
 const jwt = require("jsonwebtoken");
 
 module.exports.show = async (req, res) => {
-  const users = await user.findByPk(req.params.id);
-  const updatedObject = objectFilter(
-    JSON.parse(JSON.stringify(users)),
-    (param) => param != "password"
-  );
+  const users = await user.findAll();
+  // const updatedObject = objectFilter(
+  //   JSON.parse(JSON.stringify(users)),
+  //   (param) => param != "password"
+  // );
 
-  res.json(updatedObject);
+  res.json(users);
 };
 
 module.exports.create = async (req, res) => {
