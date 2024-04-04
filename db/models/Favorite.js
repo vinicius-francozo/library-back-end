@@ -9,14 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.user, { foreignKey: "userId" });
-      this.belongsTo(models.book, { foreignKey: "bookId" });
+      this.belongsTo(models.user, { foreignKey: "user_id" });
+      this.belongsTo(models.book, { foreignKey: "book_id" });
     }
   }
   Favorite.init(
     {
-      userId: { type: DataTypes.INTEGER, allowNull: false },
-      bookId: { type: DataTypes.INTEGER, allowNull: false },
+      user_id: { type: DataTypes.INTEGER, allowNull: false },
+      book_id: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
       sequelize,

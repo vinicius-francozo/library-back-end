@@ -10,19 +10,19 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.book, {
-        foreignKey: "bookId",
+        foreignKey: "book_id",
         onDelete: "CASCADE",
       });
       this.belongsTo(models.user, {
-        foreignKey: "userId",
+        foreignKey: "user_id",
         onDelete: "CASCADE",
       });
     }
   }
   Review.init(
     {
-      bookId: { type: DataTypes.INTEGER, allowNull: false },
-      userId: { type: DataTypes.INTEGER, allowNull: false },
+      book_id: { type: DataTypes.INTEGER, allowNull: false },
+      user_id: { type: DataTypes.INTEGER, allowNull: false },
       rate: { type: DataTypes.INTEGER, allowNull: false },
       text: { type: DataTypes.STRING, allowNull: false },
     },

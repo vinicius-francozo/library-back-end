@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 
 module.exports.listCheckout = async (req, res) => {
   const rents = await rent.findAll({
-    where: { userId: req.user.id, status: 0 },
+    where: { user_id: req.user.id, status: 0 },
     attributes: ["id"],
     include: {
       model: book,
@@ -18,7 +18,11 @@ module.exports.listCheckout = async (req, res) => {
 
 module.exports.getOneCheckoutOrRented = async (req, res) => {
   const rents = await rent.findOne({
-    where: { userId: req.user.id, bookId: req.params.bookId, status: [0, 1] },
+    where: {
+      user_id: req.user.id,
+      book_id: req.params.book_id,
+      status: [0, 1],
+    },
     attributes: ["id"],
     include: {
       model: book,
@@ -34,14 +38,14 @@ module.exports.getOneCheckoutOrRented = async (req, res) => {
 module.exports.confirmPurchase = async (req, res) => {
   await rent.update(
     { status: 1 },
-    { where: { userId: req.user.id, status: 0 } }
+    { where: { user_id: req.user.id, status: 0 } }
   );
   res.json({ message: "Livros alugados! confira em Meus Livros" });
 };
 
 module.exports.listRents = async (req, res) => {
   const rents = await rent.findAll({
-    where: { userId: req.user.id, status: 1 },
+    where: { user_id: req.user.id, status: 1 },
     attributes: ["id"],
     include: {
       model: book,
@@ -54,7 +58,7 @@ module.exports.listRents = async (req, res) => {
 
 module.exports.returnBook = async (req, res) => {
   const rents = await rent.findOne({
-    where: { userId: req.user.id, id: req.params.id, status: 1 },
+    where: { user_id: req.user.id, id: req.params.id, status: 1 },
   });
   if (rents) {
     await rents.set({ status: 2 });
@@ -67,18 +71,18 @@ module.exports.returnBook = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const books = await book.findByPk(req.params.bookId);
+  const books = await book.findByPk(req.params.book_id);
   const rents = await rent.findOne({
     where: {
-      userId: req.user.id,
-      bookId: req.params.bookId,
+      user_id: req.user.id,
+      book_id: req.params.book_id,
       status: [0, 1],
     },
   });
   if (books && !rents) {
     await rent.create({
-      userId: req.user.id,
-      bookId: req.params.bookId,
+      user_id: req.user.id,
+      book_id: req.params.book_id,
     });
 
     res
@@ -94,7 +98,7 @@ module.exports.create = async (req, res) => {
 module.exports.delete = async (req, res) => {
   const { id } = req.params;
   const isDeleted = await rent.destroy({
-    where: { userId: req.user.id, id: id, status: 0 },
+    where: { user_id: req.user.id, id: id, status: 0 },
   });
   if (!isDeleted) {
     res.json({ message: "Livro não encontrado" }).end();

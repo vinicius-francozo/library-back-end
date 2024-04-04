@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.user, {
-        foreignKey: "userId",
+        foreignKey: "user_id",
         onDelete: "CASCADE",
       });
       this.hasMany(models.book, {
-        foreignKey: "authorId",
+        foreignKey: "author_id",
       });
     }
   }
@@ -24,9 +24,9 @@ module.exports = (sequelize, DataTypes) => {
       surname: { type: DataTypes.STRING, allowNull: false },
       description: { type: DataTypes.STRING, allowNull: false },
       country: { type: DataTypes.STRING, allowNull: false },
-      birthDate: { type: DataTypes.DATE, allowNull: false },
+      birth_date: { type: DataTypes.DATE, allowNull: false },
       picture: { type: DataTypes.STRING, allowNull: false },
-      userId: { type: DataTypes.INTEGER, allowNull: false },
+      user_id: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
       sequelize,

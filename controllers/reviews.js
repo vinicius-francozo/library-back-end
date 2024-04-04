@@ -2,7 +2,7 @@ const { review, book } = require("../db/models");
 
 module.exports.getUserReviews = async (req, res) => {
   const reviews = await review.findAll({
-    where: { userId: req.user.id },
+    where: { user_id: req.user.id },
   });
   res.json({
     reviews,
@@ -10,8 +10,11 @@ module.exports.getUserReviews = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const books = await book.findByPk(req.params.bookId);
-  const review = await books.createReview({ userId: req.user.id, ...req.body });
+  const books = await book.findByPk(req.params.book_id);
+  const review = await books.createReview({
+    user_id: req.user.id,
+    ...req.body,
+  });
 
   res.json({
     review,

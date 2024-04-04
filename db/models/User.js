@@ -10,23 +10,23 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.hasMany(models.book, {
-        foreignKey: "userId",
+        foreignKey: "user_id",
       });
       this.hasMany(models.author, {
-        foreignKey: "userId",
+        foreignKey: "user_id",
       });
       this.hasMany(models.review, {
-        foreignKey: "userId",
+        foreignKey: "user_id",
       });
       this.belongsToMany(models.book, {
         through: models.favorite,
-        foreignKey: "userId",
-        otherKey: "bookId",
+        foreignKey: "user_id",
+        otherKey: "book_id",
       });
       this.belongsToMany(models.book, {
         through: models.rent,
-        foreignKey: "userId",
-        otherKey: "bookId",
+        foreignKey: "user_id",
+        otherKey: "book_id",
       });
     }
   }

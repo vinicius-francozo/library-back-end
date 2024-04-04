@@ -45,7 +45,7 @@ module.exports.show = async (req, res) => {
       },
       {
         model: review,
-        attributes: ["text", "rate", "id", "userId"],
+        attributes: ["text", "rate", "id", "user_id"],
         include: { model: user, attributes: ["id", "username"] },
       },
     ],
@@ -76,7 +76,7 @@ module.exports.create = async (req, res) => {
   const image = req.file.path;
   const books = await book.create({
     ...req.body,
-    userId: req.user.id,
+    user_id: req.user.id,
     cover: image,
   });
   res.json({
@@ -88,7 +88,7 @@ module.exports.update = async (req, res) => {
   const image = req?.file?.path || req.body.image;
   const updateParams = objectFilter(
     req.body,
-    (param) => !["userId", "id"].includes(param)
+    (param) => !["user_id", "id"].includes(param)
   );
   const books = await book.findByPk(req.params.id);
   await books.set({ ...updateParams, cover: image });

@@ -29,7 +29,7 @@ module.exports.create = async (req, res) => {
   const image = req.file.path;
   const authors = await author.create({
     ...req.body,
-    userId: req.user.id,
+    user_id: req.user.id,
     picture: image,
   });
   res.json({
@@ -41,7 +41,7 @@ module.exports.update = async (req, res) => {
   const image = req?.file?.path || req.body.image;
   const updateParams = objectFilter(
     req.body,
-    (param) => !["userId", "id"].includes(param)
+    (param) => !["user_id", "id"].includes(param)
   );
   const authors = await author.findByPk(req.params.id);
   await authors.set({ ...updateParams, picture: image });

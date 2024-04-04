@@ -10,7 +10,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "pedbook",
+    folder: process.env.CLOUDINARY_FOLDER_NAME,
     allowedFormats: ["jpeg", "png", "jpg"],
   },
 });

@@ -2,8 +2,8 @@ const { favorite, book, author } = require("../db/models");
 
 module.exports.index = async (req, res) => {
   const favorites = await favorite.findAll({
-    where: { userId: req.user.id },
-    attributes: ["id", "userId", "bookId"],
+    where: { user_id: req.user.id },
+    attributes: ["id", "user_id", "book_id"],
     include: {
       model: book,
       attributes: ["id", "title", "cover"],
@@ -17,21 +17,21 @@ module.exports.index = async (req, res) => {
 
 module.exports.show = async (req, res) => {
   const favorites = await favorite.findOne({
-    where: { userId: req.user.id, bookId: req.params.bookId },
+    where: { user_id: req.user.id, book_id: req.params.book_id },
   });
 
   res.json({ favorites });
 };
 
 module.exports.create = async (req, res) => {
-  const books = await book.findByPk(req.params.bookId);
+  const books = await book.findByPk(req.params.book_id);
   const favorites = await favorite.findOne({
-    where: { userId: req.user.id, bookId: req.params.bookId },
+    where: { user_id: req.user.id, book_id: req.params.book_id },
   });
   if (books && !favorites) {
     await favorite.create({
-      userId: req.user.id,
-      bookId: req.params.bookId,
+      user_id: req.user.id,
+      book_id: req.params.book_id,
     });
 
     res
@@ -45,9 +45,9 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.delete = async (req, res) => {
-  const { bookId } = req.params;
+  const { book_id } = req.params;
   const isDeleted = await favorite.destroy({
-    where: { userId: req.user.id, bookId: bookId },
+    where: { user_id: req.user.id, book_id: book_id },
   });
   if (!isDeleted) {
     res.json({ message: "Favorito não encontrado" }).end();
