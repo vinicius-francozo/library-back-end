@@ -8,29 +8,29 @@ module.exports = {
       [
         {
           title: "How Innovation Works",
-          authorId: 1,
-          categoryId: 1,
+          author_id: 1,
+          category_id: 1,
           pages: 100,
           publisher: "Dam co.",
           sinopsis: "lorem ipsum dolor",
           edition: 3,
           releaseDate: new Date(),
           cover: "/src/assets/matt-ridley-H-LIL57PHCc-unsplash.jpg",
-          userId: 1000000,
+          user_id: 1000000,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           title: "The Psychology of Money",
-          authorId: 1,
-          categoryId: 1,
+          author_id: 1,
+          category_id: 1,
           pages: 100,
           publisher: "Dam co.",
           sinopsis: "lorem ipsum dolor",
           edition: 3,
           releaseDate: new Date(),
           cover: "/src/assets/morgan-housel-aZ_MmSmAcjg-unsplash.jpg",
-          userId: 1000000,
+          user_id: 1000000,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -39,6 +39,6 @@ module.exports = {
     );
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("books", { userId: 1000000 }, {});
+    return queryInterface.bulkDelete("books", { user_id: 1000000 }, {});
   },
 };
