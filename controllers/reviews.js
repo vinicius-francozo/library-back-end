@@ -10,7 +10,7 @@ module.exports.getUserReviews = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const books = await book.findByPk(req.params.book_id);
+  const books = await book.findByPk(req.params.bookId);
   const review = await books.createReview({
     user_id: req.user.id,
     ...req.body,

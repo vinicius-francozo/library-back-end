@@ -17,21 +17,21 @@ module.exports.index = async (req, res) => {
 
 module.exports.show = async (req, res) => {
   const favorites = await favorite.findOne({
-    where: { user_id: req.user.id, book_id: req.params.book_id },
+    where: { user_id: req.user.id, book_id: req.params.bookId },
   });
 
   res.json({ favorites });
 };
 
 module.exports.create = async (req, res) => {
-  const books = await book.findByPk(req.params.book_id);
+  const books = await book.findByPk(req.params.bookId);
   const favorites = await favorite.findOne({
-    where: { user_id: req.user.id, book_id: req.params.book_id },
+    where: { user_id: req.user.id, book_id: req.params.bookId },
   });
   if (books && !favorites) {
     await favorite.create({
       user_id: req.user.id,
-      book_id: req.params.book_id,
+      book_id: req.params.bookId,
     });
 
     res
@@ -45,9 +45,9 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.delete = async (req, res) => {
-  const { book_id } = req.params;
+  const { bookId } = req.params;
   const isDeleted = await favorite.destroy({
-    where: { user_id: req.user.id, book_id: book_id },
+    where: { user_id: req.user.id, book_id: bookId },
   });
   if (!isDeleted) {
     res.json({ message: "Favorito não encontrado" }).end();

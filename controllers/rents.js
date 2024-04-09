@@ -20,7 +20,7 @@ module.exports.getOneCheckoutOrRented = async (req, res) => {
   const rents = await rent.findOne({
     where: {
       user_id: req.user.id,
-      book_id: req.params.book_id,
+      book_id: req.params.bookId,
       status: [0, 1],
     },
     attributes: ["id"],
@@ -71,18 +71,18 @@ module.exports.returnBook = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const books = await book.findByPk(req.params.book_id);
+  const books = await book.findByPk(req.params.bookId);
   const rents = await rent.findOne({
     where: {
       user_id: req.user.id,
-      book_id: req.params.book_id,
+      book_id: req.params.bookId,
       status: [0, 1],
     },
   });
   if (books && !rents) {
     await rent.create({
       user_id: req.user.id,
-      book_id: req.params.book_id,
+      book_id: req.params.bookId,
     });
 
     res
