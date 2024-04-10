@@ -1,4 +1,5 @@
 const { review, book } = require("../db/models");
+const objectFilter = require("../utils/objectFilter");
 
 module.exports.getUserReviews = async (req, res) => {
   const reviews = await review.findAll({
@@ -19,6 +20,19 @@ module.exports.create = async (req, res) => {
   res.json({
     review,
   });
+};
+
+module.exports.update = async (req, res) => {
+  const updateParams = objectFilter(
+    req.body,
+    (param) => !["id", "book_id", "user_id"].includes(param)
+  );
+
+  const reviews = await review.findByPk(req.params.id);
+
+  await reviews.set({ ...updateParams });
+  await reviews.save();
+  res.json({ reviews });
 };
 
 module.exports.delete = async (req, res) => {

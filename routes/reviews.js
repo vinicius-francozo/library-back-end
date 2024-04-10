@@ -10,4 +10,6 @@ router.get("/:id", jwtValidation, catchAsync(reviewControllers.getUserReviews));
 
 router.delete("/:id", jwtValidation, catchAsync(reviewControllers.delete));
 
+router.put("/:id", jwtValidation, catchAsync(reviewControllers.update));
+
 module.exports = router;
