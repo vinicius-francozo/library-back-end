@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       publisher: { type: DataTypes.STRING, allowNull: false },
       sinopsis: { type: DataTypes.STRING, allowNull: false },
       edition: { type: DataTypes.STRING, allowNull: false },
-      releaseDate: { type: DataTypes.DATE, allowNull: false },
+      release_date: { type: DataTypes.DATE, allowNull: false },
       cover: { type: DataTypes.STRING, allowNull: false },
       user_id: { type: DataTypes.INTEGER, allowNull: false },
     },

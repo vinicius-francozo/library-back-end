@@ -27,14 +27,24 @@ module.exports.show = async (req, res) => {
 
 module.exports.create = async (req, res) => {
   const image = req.file.path;
-  const authors = await author.create({
-    ...req.body,
-    user_id: req.user.id,
-    picture: image,
+  const name = req.body.name;
+  const surname = req.body.surname;
+  const possibleAuthor = await author.findOne({
+    where: { name: name, surname: surname },
   });
-  res.json({
-    authors,
-  });
+  if (!possibleAuthor) {
+    const authors = await author.create({
+      ...req.body,
+      user_id: req.user.id,
+      picture: image,
+    });
+    return res
+      .json({
+        authors,
+      })
+      .end();
+  }
+  res.status(422).json({ message: "Erro ao criar autor" });
 };
 
 module.exports.update = async (req, res) => {
